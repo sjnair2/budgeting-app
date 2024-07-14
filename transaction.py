@@ -82,5 +82,18 @@ class Transaction:
     
     def attributes_as_str_list(self):
         return [self.bank, self.acct_num, str(self.transaction_date), self.description, self.category, self.amount_str()]
+    
+    def ask_for_category(self):
+        allowed_categories=["shopping", "groceries", "payment", "food & drink", "personal", "travel", "entertainment", "bills & utilities", "fees & adjustments", "gifts & donations", "rent", "income", "atm", "health & wellness", "gas", "home", "transfer"]
+        print(f"Allowed categories: {allowed_categories}")
+        new_category=input(f"{self} ... Enter Category: ").lower()
+        while not new_category in allowed_categories:
+            print(f"{new_category} is not an allowed category")
+            print(f"Allowed categories: {allowed_categories}")
+            new_category=input(f"{self} ... Enter Category: ").lower()
+        
+        self.category=new_category
+
+
 
     
