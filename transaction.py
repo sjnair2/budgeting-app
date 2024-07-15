@@ -70,7 +70,7 @@ class Transaction:
         self.__category=category.lower()
     
     def __str__(self):
-        return f"{self.bank},{self.acct_num},{self.transaction_date},{self.description},{self.category},{self.amount_str()}"
+        return f"{self.bank:8} {self.acct_num:10} {str(self.transaction_date):12} {self.description:40} {self.category:20} {self.amount_str()}"
 
     def amount_str(self):
         return f"{self.amount:.2f}"
