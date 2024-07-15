@@ -1,5 +1,7 @@
 import csv
 from transaction import Transaction
+from operator import attrgetter
+from datetime import datetime
 
 #TODO: search for transactions based on month and category
 #TODO: monthly spending by category
@@ -35,7 +37,10 @@ def read_bankfile(transactions:list, filename:str, bank:str, acct_num:str):
                     new_transaction.ask_for_category()
                 transactions.append(new_transaction)
                 num_new_transactions+=1
+    transactions.sort(key=attrgetter('transaction_date', 'bank', 'acct_num'))
     print(num_new_transactions, "transactions added.")
+
+
 
 def read_transactions_db(transactions:list):
     with open("transaction_csvs/transactions_db.csv") as new_file:
@@ -55,13 +60,26 @@ def main():
     transactions=[]
     read_transactions_db(transactions)
     while True:
-        action=int(input("(1) add transactions; (2) exit: "))
-        if action==2:
+        action=int(input("(1) add transactions; (2) query by date; (0) exit: "))
+        if action==0:
             break
         elif action==1:
             bank=input("Bank: ")
             acct_num=input("Last 4 digits of account: ")
             filename=input("File name: ")
             read_bankfile(transactions, filename, bank, acct_num)
+        elif action==2:
+            start_date=datetime.fromisoformat(input("Start date (yyyy-mm-dd): ")).date()
+            end_date=datetime.fromisoformat(input("End date (yyyy-mm-dd): ")).date()
+            transactions_in_dates=[x for x in transactions if (x.transaction_date>=start_date and x.transaction_date<end_date)]
+            unique_categories={transaction.category for transaction in transactions_in_dates}
+            for category in unique_categories:
+                transactions_in_category = [x for x in transactions_in_dates if x.category == category]
+                print("\n"+category)
+                for transaction in transactions_in_category:
+                    print("\t", transaction)
+    
+
+            
     write_transactions_db(transactions)
 main()
