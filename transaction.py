@@ -1,5 +1,4 @@
 from datetime import datetime
-from math import ceil, floor
 
 #TODO: category validation
 class Transaction:
